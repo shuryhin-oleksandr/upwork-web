@@ -1,1 +1,1 @@
-export const PROJECT_NAME = "Panda CRM";
+export const PROJECT_NAME = "Upworker";
