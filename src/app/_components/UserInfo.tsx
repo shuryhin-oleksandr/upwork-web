@@ -11,9 +11,7 @@ export default function UserInfo() {
   if (error)
     return (
       <p className="text-destructive">
-        {typeof (error as { detail?: unknown })?.detail === "string"
-          ? (error as { detail: string }).detail
-          : "Request failed"}
+        {error instanceof Error ? error.message : "Request failed"}
       </p>
     );
 
