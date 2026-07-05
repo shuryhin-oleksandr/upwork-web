@@ -1,3 +1,7 @@
+## Design notes
+To prevent flickering (loading state) 401 from `/users/me` is checked on Next.js server side.
+In-page 401 (by browser) cause a redirect to login (full page reload).
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
