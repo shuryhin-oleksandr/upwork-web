@@ -1,5 +1,6 @@
 import ky from "ky";
 import Cookies from "js-cookie";
+import { LOGIN_PATH } from "./constants";
 
 const CSRF_SAFE_HTTP_METHODS = new Set(["GET", "HEAD", "OPTIONS", "TRACE"]);
 
@@ -18,6 +19,14 @@ export const apiClient = ky.create({
         if (!csrfToken) return;
 
         request.headers.set("x-csrftoken", csrfToken);
+      },
+    ],
+    afterResponse: [
+      ({ response }) => {
+        if (response.status !== 401) return;
+        if (window.location.pathname === LOGIN_PATH) return;
+
+        window.location.assign(LOGIN_PATH);
       },
     ],
   },

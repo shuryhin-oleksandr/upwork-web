@@ -3,12 +3,13 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 import type { User } from "./api";
+import { LOGIN_PATH } from "./constants";
 
 const SESSION_COOKIE_NAME = "session";
 
 export const requireAuth = cache(async (): Promise<User> => {
   const cookieStore = await cookies();
-  if (!cookieStore.has(SESSION_COOKIE_NAME)) redirect("/login");
+  if (!cookieStore.has(SESSION_COOKIE_NAME)) redirect(LOGIN_PATH);
 
   const cookieHeaderForwardedToBackend = cookieStore
     .getAll()
@@ -21,7 +22,7 @@ export const requireAuth = cache(async (): Promise<User> => {
     throwHttpErrors: false,
   });
   const currentUserResponse = await apiClient.get("users/me");
-  if (currentUserResponse.status === 401) redirect("/login");
+  if (currentUserResponse.status === 401) redirect(LOGIN_PATH);
   if (!currentUserResponse.ok) {
     throw new Error(
       `Failed to load the authenticated user (${currentUserResponse.status})`,
