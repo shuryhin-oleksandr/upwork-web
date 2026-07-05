@@ -1,12 +1,15 @@
 import { AlertCircleIcon, GalleryVerticalEnd } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { LoginForm } from "@/components/login-form";
+import { requireGuest } from "@/lib/auth";
 
 export default async function LoginPage({
   searchParams,
 }: {
   searchParams: Promise<{ error?: string }>;
 }) {
+  await requireGuest();
+
   const { error } = await searchParams;
   const signInFailed = error !== undefined;
 

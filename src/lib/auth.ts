@@ -3,13 +3,13 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 import type { User } from "./api";
-import { LOGIN_PATH } from "./constants";
+import { HOME_PATH, LOGIN_PATH } from "./constants";
 
 const SESSION_COOKIE_NAME = "session";
 
-export const requireAuth = cache(async (): Promise<User> => {
+const getAuthenticatedUser = cache(async (): Promise<User | null> => {
   const cookieStore = await cookies();
-  if (!cookieStore.has(SESSION_COOKIE_NAME)) redirect(LOGIN_PATH);
+  if (!cookieStore.has(SESSION_COOKIE_NAME)) return null;
 
   const cookieHeaderForwardedToBackend = cookieStore
     .getAll()
@@ -22,7 +22,7 @@ export const requireAuth = cache(async (): Promise<User> => {
     throwHttpErrors: false,
   });
   const currentUserResponse = await apiClient.get("users/me");
-  if (currentUserResponse.status === 401) redirect(LOGIN_PATH);
+  if (currentUserResponse.status === 401) return null;
   if (!currentUserResponse.ok) {
     throw new Error(
       `Failed to load the authenticated user (${currentUserResponse.status})`,
@@ -30,3 +30,14 @@ export const requireAuth = cache(async (): Promise<User> => {
   }
   return currentUserResponse.json<User>();
 });
+
+export const requireAuth = async (): Promise<User> => {
+  const authenticatedUser = await getAuthenticatedUser();
+  if (!authenticatedUser) redirect(LOGIN_PATH);
+  return authenticatedUser;
+};
+
+export const requireGuest = async (): Promise<void> => {
+  const authenticatedUser = await getAuthenticatedUser();
+  if (authenticatedUser) redirect(HOME_PATH);
+};
