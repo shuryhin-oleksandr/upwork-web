@@ -1,7 +1,10 @@
 import { cookies } from "next/headers";
+import { requireAuth } from "@/lib/auth";
 import UserInfo from "./_components/UserInfo";
 
 export default async function Home() {
+  await requireAuth();
+
   const cookieStore = await cookies();
   const allCookies = cookieStore.getAll();
 
