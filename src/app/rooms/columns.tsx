@@ -14,4 +14,18 @@ export const columns: ColumnDef<Room>[] = [
     header: "Job",
     cell: ({ row }) => row.original.topic || "—",
   },
+  {
+    accessorKey: "nextFollowUpNumber",
+    header: "FU#",
+    cell: ({ row }) => row.original.nextFollowUpNumber || "—",
+  },
+  {
+    accessorKey: "nextFollowUpDate",
+    header: "FU date",
+    cell: ({ row }) => {
+      const nextFollowUpDate = row.original.nextFollowUpDate;
+      if (!nextFollowUpDate) return "—";
+      return new Date(nextFollowUpDate).toLocaleDateString();
+    },
+  },
 ];
