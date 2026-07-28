@@ -49,3 +49,17 @@ export interface User {
 export function getCurrentUser() {
   return apiClient.get("/users/me").json<User>();
 }
+
+export interface Room {
+  id: string;
+  roomName: string | null;
+  topic: string | null;
+  roomUrl: string;
+  jobUrl: string | null;
+  nextFollowUpNumber: number;
+  nextFollowUpDate: string | null;
+}
+
+export function getRooms() {
+  return apiClient.get("/rooms").json<Room[]>();
+}
