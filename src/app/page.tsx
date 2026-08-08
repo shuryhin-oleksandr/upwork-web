@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { cookies } from "next/headers";
 import { requireAuth } from "@/lib/auth";
+import { Button } from "@/components/ui/button";
 import UserInfo from "./_components/UserInfo";
 
 export default async function Home() {
@@ -27,6 +29,9 @@ export default async function Home() {
             </p>
           ))
         )}
+        <Button asChild variant="outline" className="w-fit mt-3">
+          <Link href="/debug">Go to debug</Link>
+        </Button>
       </div>
     </div>
   );
