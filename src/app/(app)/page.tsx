@@ -2,7 +2,7 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { requireAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import UserInfo from "./_components/UserInfo";
+import UserInfo from "../_components/UserInfo";
 
 export default async function Home() {
   await requireAuth();
