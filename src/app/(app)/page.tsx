@@ -1,0 +1,39 @@
+import Link from "next/link";
+import { cookies } from "next/headers";
+import { requireAuth } from "@/lib/auth";
+import { Container } from "@/components/container";
+import { Button } from "@/components/ui/button";
+import UserInfo from "../_components/UserInfo";
+
+export default async function Home() {
+  await requireAuth();
+
+  const cookieStore = await cookies();
+  const allCookies = cookieStore.getAll();
+
+  return (
+    <Container className="py-8 flex flex-col gap-2 overflow-hidden">
+      <h1 className="text-2xl font-bold">Welcome</h1>
+      <UserInfo />
+      <div className="mt-4">
+        <p className="text-muted-foreground">Cookies @ server:</p>
+        {allCookies.length === 0 ? (
+          <p>
+            <code>(empty)</code>
+          </p>
+        ) : (
+          allCookies.map((c) => (
+            <p key={c.name}>
+              <code>
+                {c.name}={c.value}
+              </code>
+            </p>
+          ))
+        )}
+        <Button asChild variant="outline" className="w-fit mt-3">
+          <Link href="/debug">Go to debug</Link>
+        </Button>
+      </div>
+    </Container>
+  );
+}
